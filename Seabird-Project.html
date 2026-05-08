@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Birds at Sea: Uncovering Seasonal Patterns in New Zealand’s Seabird Activity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Seabird-Project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Seabird-Project_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Seabird-Project_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Seabird-Project_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="Seabird-Project_files/libs/quarto-html/popper.min.js"></script>
+<script src="Seabird-Project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Seabird-Project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Seabird-Project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Seabird-Project_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Seabird-Project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Seabird-Project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Seabird-Project_files/libs/bootstrap/bootstrap-6a8e6d95bfcd174082ff54166b04dcf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Birds at Sea: Uncovering Seasonal Patterns in New Zealand’s Seabird Activity</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Seabirds are among the most widely traveled animals on earth, migrating thousands of miles across the open ocean each year. Because of their wide range, which spans continents and oceans, they are an integral part of many marine ecosystems. As ship traffic continues to increase in the southern ocean, understanding how seabirds use these waters across different seasons becomes increasingly important for conservation efforts. Using historical logbook data collected near New Zealand between 1969 and 1990, this analysis explores how season influences which seabird species appear and how they behave. Understanding these seasonal patterns can help ecologists and fisheries managers work together to identify when and where birds are most concentrated, and therefore most vulnerable to disturbance from ship traffic and fishing activity.</p>
+<p>These factors were explored using the dataset <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2026/2026-04-14/readme.md">Bird Sightings at Sea</a>, collected by Te Papa Tongarewa, The Museum of New Zealand. The dataset consists of hand-recorded logbook entries documenting bird sightings during 10-minute observation periods from ships at sea. The data includes information about the birds observed, such as species name and behavior, as well as data about ships and their locations. The data was imported and analyzed using R and the tidyverse package. The bird and ship datasets were cleaned, subsetted, and joined to create a single dataset to be used for this analysis. Observations with missing values and erroneous counts were then removed. Exploratory visualizations including line charts, bar charts, and maps were then created to examine seabird species composition and behavior across seasons.</p>
+<p>The findings of this analysis can be used to inform conservation groups and fisheries managers on how to best protect migratory seabirds as ship activity in the region grows. By identifying which species are most prevalent in each season, conservationists can develop targeted plans to protect their critical nesting habitats and migratory pathways. By tracking behavioral patterns across seasons, scientists can begin to assess whether ship activity influences natural bird behavior.</p>
+</section>
+<section id="packages-required" class="level1">
+<h1>Packages Required</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># data import, wrangling, and visualization</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># working with date variable</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)  <span class="co"># base map layers for geographic plot</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearthdata)  <span class="co"># country boundary data for mapping</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)  <span class="co"># for working with naturalearthdata</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="data-preparation" class="level1">
+<h1>Data Preparation</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>birds <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-14/birds.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ships <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-14/ships.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For this analysis, two datasets were imported from the larger Bird Sightings at Sea collection. The birds dataset originally contained 26 variables and the ship dataset contained 21 variables. Rather than including all the available variables, each dataset was subsetted to include only those relevant to the research question.</p>
+<p>The variables from the bird dataset used in this analysis were:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>record_id</td>
+<td>links each bird observation to a corresponding ship record</td>
+</tr>
+<tr class="even">
+<td>species_common_name</td>
+<td>the common name of the observed species</td>
+</tr>
+<tr class="odd">
+<td>count</td>
+<td>the total number of birds observed during the 10-minute period</td>
+</tr>
+<tr class="even">
+<td>feeding</td>
+<td>behavioral variable, birds observed feeding</td>
+</tr>
+<tr class="odd">
+<td>following_ship</td>
+<td>behavioral variable, birds observed following ships wake</td>
+</tr>
+<tr class="even">
+<td>accompanying</td>
+<td>behavioral variable, birds observed flying along side the ship</td>
+</tr>
+<tr class="odd">
+<td>flying_past</td>
+<td>behavioral variable, birds observed flying past the ship</td>
+</tr>
+<tr class="even">
+<td>sitting_on_water</td>
+<td>behavioral variable, birds observed sitting on water</td>
+</tr>
+</tbody>
+</table>
+<p>To determine which behavior variables from the birds dataset to include, the proportion of observations that included each behavior was calculated separately across the full dataset. Behaviors that occurred in fewer than 1% of the observations were excluded from the comparisons. This included sitting on ice (0.1%), sitting on the ship (0.3%), being held in hand (0.01%), and naturally feeding (3.5%). The moulting variable was also excluded from this analysis, as it accounted for a disproportionate amount (73%) of the observations, which could possibly reflect issues in the data recording, rather than truly observed behavior.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  calculate proportion of observations for each behavior</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>birds <span class="sc">|&gt;</span> <span class="fu">summarise</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_sitting_water =</span> <span class="fu">mean</span>(sitting_on_water, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_sitting_ice =</span> <span class="fu">mean</span>(sitting_on_ice, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_sitting_ship =</span> <span class="fu">mean</span>(sitting_on_ship, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_in_hand =</span> <span class="fu">mean</span>(in_hand, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_flying_past =</span> <span class="fu">mean</span>(flying_past, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_accompanying =</span> <span class="fu">mean</span>(accompanying, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_following_ship =</span> <span class="fu">mean</span>(following_ship, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_moulting =</span> <span class="fu">mean</span>(moulting, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_naturally_feeding =</span> <span class="fu">mean</span>(naturally_feeding, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">pct_feeding =</span> <span class="fu">mean</span>(feeding, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 10
+  pct_sitting_water pct_sitting_ice pct_sitting_ship pct_in_hand pct_flying_past
+              &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+1             0.124         0.00147          0.00308    0.000108           0.420
+# ℹ 5 more variables: pct_accompanying &lt;dbl&gt;, pct_following_ship &lt;dbl&gt;,
+#   pct_moulting &lt;dbl&gt;, pct_naturally_feeding &lt;dbl&gt;, pct_feeding &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>The variables from the ships dataset used in this analysis were:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>record_id</td>
+<td>links each ship record to a corresponding bird observation</td>
+</tr>
+<tr class="even">
+<td>date</td>
+<td>date observation occurred</td>
+</tr>
+<tr class="odd">
+<td>season</td>
+<td>season observation occurred in, based on Southern hemisphere season: “spring”, “summer”, “winter”, “autumn”</td>
+</tr>
+<tr class="even">
+<td>latitude</td>
+<td>latitude observation occurred at</td>
+</tr>
+<tr class="odd">
+<td>longitude</td>
+<td>longitude observation occurred at</td>
+</tr>
+</tbody>
+</table>
+<p>Both datasets were then subsetted to retain only the variables relevant to this analysis and joined using their shared identifier record_id. One observation (record_id 1184009) was automatically dropped during the join as it had no corresponding ship record.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  subset each dataset to only include necessary variables</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>birds_clean <span class="ot">&lt;-</span> birds <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(record_id, species_common_name, count, feeding, following_ship,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         accompanying, flying_past, sitting_on_water)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ships_clean <span class="ot">&lt;-</span> ships <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(record_id, season, date, latitude, longitude)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join datasets</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="ot">&lt;-</span> birds_clean <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ships_clean, <span class="at">by =</span> <span class="st">"record_id"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The count variable contained multiple values of 99999, used to represent estimated counts of over 100,000 birds. These values were removed as they do not represent true counts and could skew any averages. Observations missing a season value were also removed, as season was the primary variable used for comparison in this analysis. After cleaning, the dataset contained 46,314 observations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  filter to remove NA and erroneous values</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="ot">&lt;-</span> bird_data <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">!=</span> <span class="dv">99999</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (<span class="sc">!</span><span class="fu">is.na</span>(season))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The species_common_name variable recorded wandering albatross sightings across four separate plumage phases (PL1 through PL4). Since these represent the same species at different life stages, they were combined into a single category. The dataset was then further subsetted to include only the top 8 most commonly observed species, removing rarer species that would not contribute meaningfully to a seasonal comparison.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine wandering albatross plumage phases </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="ot">&lt;-</span> bird_data <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species_common_name =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(species_common_name, <span class="st">"Wandering albatross"</span>) <span class="sc">~</span> <span class="st">"Wandering Albatross"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> species_common_name</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># slice top 8 most abundant species</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>top_8_species <span class="ot">&lt;-</span> bird_data <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(species_common_name, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(species_common_name)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>top_8_species</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Wandering Albatross"                 
+[2] "Cape petrel"                         
+[3] "Grey-faced petrel"                   
+[4] "Giant petrel sensu lato"             
+[5] "Prion (unidentified)"                
+[6] "Black-browed albatross sensu lato AD"
+[7] "Sooty shearwater"                    
+[8] "Australasian gannet AD"              </code></pre>
+</div>
+</div>
+<p>The final dataset, bird_data, contained 12 variables. The first 20 rows are shown below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print first 20 rows of final dataset</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 12
+   record_id species_common_name       count feeding following_ship accompanying
+       &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;          &lt;lgl&gt;       
+ 1   1083001 Wandering Albatross           6 FALSE   FALSE          TRUE        
+ 2   1083001 Black-browed albatross s…     2 FALSE   FALSE          TRUE        
+ 3   1083001 Cape petrel                   8 FALSE   FALSE          TRUE        
+ 4   1083001 Fairy prion                   2 FALSE   FALSE          TRUE        
+ 5   1083001 Sooty shearwater              4 FALSE   FALSE          TRUE        
+ 6   1084001 Royal albatross sensu la…    10 FALSE   TRUE           FALSE       
+ 7   1084001 Black-browed albatross s…     2 FALSE   TRUE           FALSE       
+ 8   1084001 Sooty shearwater             18 TRUE    FALSE          TRUE        
+ 9   1084002 Royal albatross sensu la…    10 FALSE   TRUE           FALSE       
+10   1084002 Black-browed albatross s…     2 FALSE   TRUE           FALSE       
+11   1084002 Cape petrel                   2 NA      NA             NA          
+12   1084002 Prion (unidentified)          2 FALSE   FALSE          TRUE        
+13   1084002 Sooty shearwater              8 TRUE    TRUE           FALSE       
+14   1084002 Seabird (Unidentified)        1 FALSE   TRUE           FALSE       
+15   1084003 Royal albatross sensu la…    14 FALSE   TRUE           FALSE       
+16   1084003 Black-browed albatross s…     4 FALSE   TRUE           FALSE       
+17   1084003 Giant petrel sensu lato       3 FALSE   TRUE           FALSE       
+18   1084003 Cape petrel                   8 FALSE   FALSE          TRUE        
+19   1084003 Fairy prion                  18 TRUE    FALSE          TRUE        
+20   1086001 Fairy prion                   6 FALSE   FALSE          TRUE        
+# ℹ 6 more variables: flying_past &lt;lgl&gt;, sitting_on_water &lt;lgl&gt;, season &lt;chr&gt;,
+#   date &lt;date&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>A second dataset, behavior_by_season, was created to summarize behavioral patterns across seasons. The proportion of observations where each behavior occurred was calculated for each season using <code>summarise</code>, and the resulting data was then reshaped using <code>pivot_longer</code> to convert the five behavior columns into a single column of behavior names with a corresponding proportion column. This format makes it easier to plot and compare behaviors across seasons.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create separate dataset showing proportion of behavirs by season</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>behavior_by_season <span class="ot">&lt;-</span> bird_data <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">|&gt;</span>  <span class="co"># group behaviors by season</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate proportion of each behavior</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">feeding =</span> <span class="fu">mean</span>(feeding, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">following_ship =</span> <span class="fu">mean</span>(following_ship, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">accompanying =</span> <span class="fu">mean</span>(accompanying, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">flying_past =</span> <span class="fu">mean</span>(flying_past, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">sitting_on_water =</span> <span class="fu">mean</span>(sitting_on_water, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">fct_relevel</span>(season, <span class="st">"spring"</span>, <span class="st">"summer"</span>, <span class="st">"autumn"</span>, <span class="st">"winter"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>season,  <span class="co"># keep all variables besides season</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"behavior"</span>,  <span class="co"># move column names to new variable</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"proportion"</span>  <span class="co"># move values to new variable</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exploratory-data-analysis" class="level1">
+<h1>Exploratory Data Analysis</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot count of observations by year </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(date)) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue2"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue2"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">"brown3"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Bird Observations Over Time"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Observations"</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Seabird-Project_files/figure-html/observation_year_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Before examining seasonal patterns, it is important to understand when the data was collected. The line chart of observations per year reveals that the data collection was not consistent across the entire 1969-1990 time period. After the initial observations were collected in 1969 there is a gap in the record until 1975. Observations then increased steadily, peaking around 1984-1985, before dropping sharply starting in 1987.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot average bird count by season</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_count =</span> <span class="fu">mean</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>  <span class="co"># calculate average number of birds per observation </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">fct_relevel</span>(season, <span class="st">"spring"</span>, <span class="st">"summer"</span>, <span class="st">"autumn"</span>, <span class="st">"winter"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> season, <span class="at">y =</span> avg_count, <span class="at">fill =</span> season)) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spring"</span> <span class="ot">=</span> <span class="st">"darkseagreen3"</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"winter"</span> <span class="ot">=</span> <span class="st">"steelblue2"</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"autumn"</span> <span class="ot">=</span> <span class="st">"brown3"</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"summer"</span> <span class="ot">=</span> <span class="st">"darkgoldenrod1"</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  ))<span class="sc">+</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Bird Count by Season"</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Season"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Average Bird Count"</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Season"</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Seabird-Project_files/figure-html/observation_season_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The average number of birds observed per 10-minute observation period was highest in summer, with an average of approximately 44 birds per observation, compared to around 20 birds in both autumn and winter. Spring had intermediate counts of around 31 birds per observation. This seasonal pattern suggests that seabirds are most abundant in the waters near New Zealand during the warmer months, consistent with known southern hemisphere migratory patterns where many species migrate to these waters in the summer in order to breed.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create plot of species by season</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>bird_data <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species_common_name <span class="sc">%in%</span> top_8_species) <span class="sc">|&gt;</span>  <span class="co"># only include top 8 species</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season, species_common_name) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(season, species_common_name) <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">factor</span>(season, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"spring"</span>, <span class="st">"summer"</span>, <span class="st">"autumn"</span>, <span class="st">"winter"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> season, <span class="at">y =</span> n, <span class="at">fill =</span> species_common_name)) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"antiquewhite"</span>,<span class="st">"brown3"</span>,<span class="st">"darkgoldenrod1"</span>,<span class="st">"darkseagreen3"</span>,<span class="st">"steelblue2"</span>,<span class="st">"whitesmoke"</span>,<span class="st">"lightslategray"</span>, <span class="st">"powderblue"</span>))<span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Species Composition by Season"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Season"</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion"</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Species"</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.key.size =</span> <span class="fu">unit</span>(<span class="fl">0.8</span>, <span class="st">"cm"</span>),</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Seabird-Project_files/figure-html/observation_species_plot-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The wandering albatross was by far the most commonly observed species, making up over 50% of the observations in summer and autumn.However, there is a noticeable shift across seasons. In the spring and winter, its proportion decreases and other species become more prevalent, including the cape-petrel, grey-faced petrel, and giant petrel. These seasonal changes in species composition suggests that different species migrate to these waters at different times of year, demonstrating the importance of using conservation strategies specific to each season.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot of behaviors by season</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>behavior_by_season <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rename behaviors</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">behavior =</span> <span class="fu">recode</span>(behavior, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"feeding"</span> <span class="ot">=</span> <span class="st">"Feeding"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"following_ship"</span> <span class="ot">=</span> <span class="st">"Following Ship"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"accompanying"</span> <span class="ot">=</span> <span class="st">"Accompanying"</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"flying_past"</span> <span class="ot">=</span> <span class="st">"Flying Past"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"sitting_on_water"</span> <span class="ot">=</span> <span class="st">"Sitting on Water"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> behavior, <span class="at">y =</span> proportion, <span class="at">fill =</span> season)) <span class="sc">+</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set fill colors</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spring"</span> <span class="ot">=</span> <span class="st">"darkseagreen3"</span>,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"winter"</span> <span class="ot">=</span> <span class="st">"steelblue2"</span>,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"autumn"</span> <span class="ot">=</span> <span class="st">"brown3"</span>,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"summer"</span> <span class="ot">=</span> <span class="st">"darkgoldenrod1"</span>))<span class="sc">+</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># resize plot</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.65</span>))<span class="sc">+</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add labels</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Seabird Behavior by Season"</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Behavior"</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion of Observations"</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Season"</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Seabird-Project_files/figure-html/observation_behavior_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Seabird behavior also varied notably across seasons. Birds were most likely yo follow or accompany ships during the winter, with around 55% of winter observations showing birds following the ship’s wake. In contrast, flying past was more common in summer and autumn, suggesting birds are less reliant on ships during warmer months, when food may be more readily available. These patterns make biological sense as birds may be more likely to opportunistically seek out ships for food and shelter in colder months when the may be less readily available. Ships operating in these waters during winter months should be aware that their presence may be attracting and disrubting the natural behavior of seabirds.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load world data at small scale to reduce rendering time</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add base layer with world map</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world, <span class="at">fill =</span> <span class="st">"gray90"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter out observations missing location or season data</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> bird_data <span class="sc">|&gt;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(latitude), <span class="sc">!</span><span class="fu">is.na</span>(longitude), <span class="sc">!</span><span class="fu">is.na</span>(season)) <span class="sc">|&gt;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">factor</span>(season, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"spring"</span>, <span class="st">"summer"</span>, <span class="st">"autumn"</span>, <span class="st">"winter"</span>))),</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude, <span class="at">color =</span> season),</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">size =</span> <span class="fl">0.8</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># zoom map to specific region</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">185</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">75</span>, <span class="sc">-</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set fill colors</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spring"</span> <span class="ot">=</span> <span class="st">"darkseagreen3"</span>,</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"summer"</span> <span class="ot">=</span> <span class="st">"darkgoldenrod1"</span>,</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"autumn"</span> <span class="ot">=</span> <span class="st">"brown3"</span>,</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"winter"</span> <span class="ot">=</span> <span class="st">"steelblue2"</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Seabird Observation Locations by Season"</span>,</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Longitude"</span>,</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Latitude"</span>,</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Season"</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Seabird-Project_files/figure-html/observation_map_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The geographic distribution of observations reveals clear seasonal patterns in where ships encountered birds. Summer observations extend far south toward Antarctica, suggesting that ships traveled into more remote waters during the warmer months. In contrast, autumn, winter, and spring observations cluster more tightly around New Zealand and southern Australia, This geographic variation reinforces the seasonal findings from the earlier plots and highlights that the dataset captures a wide but uneven geographic range.</p>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>This analysis examined how season influences the abundance, species composition, and behavior of seabirds observed near New Zealand using historical logbook data collected between 1969 and 1990. The bird and ship datasets were cleaned, subsetted and joined to create a dataset, which was then explored through a series of visualizations.</p>
+<p>The analysis revealed several notable seasonal patterns. First, seabird abundance was highest in the summer, with an average of 44 birds per observation compared to the lowest, which was 19 in the winter. Second, species composition shifted across seasons, with the wandering albatross being the highest in summer and autumn, while other species became relatively more common in the spring and winter. Third, bird behavior varied by season. Birds were most likely to follow or accompany ships in winter, while flying past was more common in summer, suggesting that birds interact more directly with ships when seeking shelter or food sources. These findings have practical implications for seabird conservation. Ships operating in New Zealand waters during winter months may encounter birds that are more likely to interact with vessels, increasing the risk of disturbing their natural behaviors and migratory patterns. Specific guidelines based on seasonality could help minimize these risks when birds are most active.</p>
+<p>This analysis has several important limitations that should be mentioned. The data was collected over 20 years ago and may not reflect current bird populations or ship traffic patterns. The recorded observations were highly uneven across years, with the majority of records concentrated to a few years in the 1980s. Additionally, observations were only made from ships, meaning the dataset would not capture bird behaviors and populations observed from land. Air temperature data, which would have been useful for confirming the relationship between season and bird abundance, was missing for 41,517 out of 46,314 observations. Future research could address these limitations by collecting more consistent observations across a wider geographic area, adding observations from land, and connecting the bird sighting data with environmental factors such as temperature.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="seagull.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:30.0%"></p>
+</figure>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
